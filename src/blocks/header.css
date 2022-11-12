@@ -2,7 +2,8 @@
   max-width: 880px;
   width: 100%;
   display: flex;
-  flex-flow: column nowrap;
+  flex-flow: row nowrap;
+  justify-content: space-between;
   gap: 41px;
   align-items: center;
   border-bottom: 1px solid rgba(84, 84, 84, 0.8);
@@ -13,8 +14,25 @@
 .header__logo {
   max-width: 173px;
   max-height: 33px;
-  align-self: flex-start;
   margin-top: 45px;
+}
+
+.header__auth {
+  visibility: hidden;
+  max-width: 52px;
+  max-height: 22px;
+  margin: 51px 0px 0px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 122%;
+  text-align: right;
+  color: #fff;
+}
+
+.header__auth_active {
+visibility: visible;
 }
 
 @media screen and (max-width: 900px) {

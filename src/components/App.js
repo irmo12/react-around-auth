@@ -1,8 +1,8 @@
-import "../index.css";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
 import React, { useState, useEffect } from "react";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import api from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import FormValidator from "../utils/FormValidator";
@@ -11,14 +11,26 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
 import CardDeleter from './CardDeleter';
+import ProtectedRoute from "./ProtectedRoute";
+import Login from "./Login";
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isEditAvatarOpen, setEditAvatarOpen] = useState(false);
   const [isEditProfileOpen, setEditProfileOpen] = useState(false);
   const [isAddPlaceOpen, setAddPlaceOpen] = useState(false);
   const [isImagePopupOpen, setImagePopupOpen] = useState(false);
   const [isDelCardWarnOpen, setDelCardWarnOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
+  
+  function login() {
+    setIsLoggedIn(true);
+  }
+
+  function register(){
+    login();
+  }
+
   function handleEditAvatarClick() {
     setEditAvatarOpen(true);
   }
@@ -173,9 +185,13 @@ function App() {
  
 
   return (
+    <BrowserRouter>
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
-        <Header />
+        <Header loggedin={isLoggedIn}/>
+        <Route path="/signin"><Login onLogin={login}/></Route>
+        {/* <Route path='/register'><Register handleSubmit={register} /></Route> */}
+        <ProtectedRoute path='/' loggedIn={isLoggedIn}>
         <Main
           onEditProfileClick={handleEditProfileClick}
           onAddPlaceClick={handleAddPlaceClick}
@@ -216,9 +232,11 @@ function App() {
           onConfirmDelete={handleCardDelete}
           isLoading={isLoading}
         />
+        </ProtectedRoute>
         <Footer />
       </CurrentUserContext.Provider>
     </div>
+    </BrowserRouter>
   );
 }
 
