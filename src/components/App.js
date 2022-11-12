@@ -188,7 +188,7 @@ function App() {
     <BrowserRouter>
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
-        <Header loggedin={isLoggedIn}/>
+        <Header loggedin={isLoggedIn} />
         <Route path="/signin"><Login onLogin={login}/></Route>
         {/* <Route path='/register'><Register handleSubmit={register} /></Route> */}
         <ProtectedRoute path='/' loggedIn={isLoggedIn}>

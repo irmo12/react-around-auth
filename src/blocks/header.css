@@ -29,6 +29,7 @@
   line-height: 122%;
   text-align: right;
   color: #fff;
+  cursor: pointer;
 }
 
 .header__auth_active {
