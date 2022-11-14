@@ -13,6 +13,8 @@ import ImagePopup from './ImagePopup';
 import CardDeleter from './CardDeleter';
 import ProtectedRoute from "./ProtectedRoute";
 import Login from "./Login";
+import Register from "./Register";
+
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -24,11 +26,11 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({});
   
   function login() {
-    setIsLoggedIn(true);
+    
   }
 
   function register(){
-    login();
+    
   }
 
   function handleEditAvatarClick() {
@@ -190,7 +192,7 @@ function App() {
       <CurrentUserContext.Provider value={currentUser}>
         <Header loggedin={isLoggedIn} />
         <Route path="/signin"><Login onLogin={login}/></Route>
-        {/* <Route path='/register'><Register handleSubmit={register} /></Route> */}
+        <Route path='/register'><Register onRegister={register} /></Route> 
         <ProtectedRoute path='/' loggedIn={isLoggedIn}>
         <Main
           onEditProfileClick={handleEditProfileClick}

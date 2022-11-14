@@ -14,7 +14,6 @@
 .header__logo {
   max-width: 173px;
   max-height: 33px;
-  margin-top: 45px;
 }
 
 .header__auth {
@@ -30,6 +29,7 @@
   text-align: right;
   color: #fff;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .header__auth_active {

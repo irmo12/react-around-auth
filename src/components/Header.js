@@ -4,7 +4,7 @@ import logo from "../images/aroundtheus.svg";
 import { useLocation, NavLink } from "react-router-dom";
 
 
-function Header({ loggedIn, type }) {
+function Header({ loggedIn, ...props }) {
   let location = useLocation();
 
   let logOrRegister = 'Log in'
@@ -17,7 +17,10 @@ function Header({ loggedIn, type }) {
   return (
     <header className="header">
       <img className="header__logo" src={logo} alt="around the u.s." />
-      <NavLink className={`header__auth ${loggedIn ? "header__auth_active" : ""}`} to={ sendTo ? '/signin' : '/register' }>{logOrRegister}</NavLink>
+      <div className="header__auth-wrapper">
+      <span className="header__auth-email"  >{loggedIn ? props.email : ''}</span>
+      <NavLink className={`header__auth ${!loggedIn ? "header__auth_active" : ""}`} to={ sendTo ? '/signin' : '/register' }>{logOrRegister}</NavLink>
+      </div>
     </header>
   );
 }
