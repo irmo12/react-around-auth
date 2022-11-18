@@ -3,7 +3,7 @@ import Main from "./Main";
 import Footer from "./Footer";
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import api from "../utils/api";
+import { api, regApi }  from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import FormValidator from "../utils/FormValidator";
 import EditProfilePopup from './EditProfilePopup';
@@ -14,6 +14,7 @@ import CardDeleter from './CardDeleter';
 import ProtectedRoute from "./ProtectedRoute";
 import Login from "./Login";
 import Register from "./Register";
+import InfoTooltip from "./InfoTooltip";
 
 
 function App() {
@@ -24,6 +25,11 @@ function App() {
   const [isImagePopupOpen, setImagePopupOpen] = useState(false);
   const [isDelCardWarnOpen, setDelCardWarnOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+  const [tooltipProps, setTooltipProps] = useState({
+    heading: '',
+    image: ''
+  })
   
   function login() {
     
@@ -63,6 +69,7 @@ function App() {
     setDelCardWarnOpen(false);
     setSelectedCard({});
     setIsLoading(false);
+    setIsTooltipOpen(false);
   }
 
   useEffect(() => {
@@ -159,6 +166,13 @@ function App() {
       .catch((err) => console.log(err));
   }
 
+  function tooltipContents(resolution) {
+ if (resolution) {
+  setTooltipProps({heading: "Success! You have now been registered.", image: URL('../images/sucess.svg')})
+ } else {
+  setTooltipProps({heading: 'Oops, something went wrong! Please try again.', image: URL('../images/fail.svg')})
+ }
+  } 
 
   useEffect(() => { 
     const settings = {
@@ -235,6 +249,10 @@ function App() {
           isLoading={isLoading}
         />
         </ProtectedRoute>
+        <InfoTooltip isOpen={isTooltipOpen}
+        onClose={closeAllPopups}
+        heading={tooltipProps.heading}
+        image={tooltipProps.image} />
         <Footer />
       </CurrentUserContext.Provider>
     </div>

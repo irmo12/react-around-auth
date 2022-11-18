@@ -63,6 +63,30 @@ class Api {
   getInitialData() {
     return Promise.all([api.getUserInfo(), api.getInitialCards()]);
   }
+
+
+  registerParams(data) {
+    return fetch(`${this._baseURL}/signup`, {
+      headers: this._headers,
+      method: "POST",
+      body: JSON.stringify(data),
+    }).then((res) => this._processResponse(res));
+  }
+
+  authorizationParams(data) {
+    return fetch(`${this._baseURL}/signin`, {
+      headers: this._headers,
+      method: "POST",
+      body: JSON.stringify(data),
+    }).then((res) => this._processResponse(res));
+  }
+
+  getUserAuth(token) {
+    return fetch(`${this._baseURL}/users/me`, {
+      headers: {...this._headers, "Authorization":`Bearer ${token}`}
+    }).then((res) => this._processResponse(res));
+  }
+  
 }
 
 const api = new Api({
@@ -73,4 +97,8 @@ const api = new Api({
   },
 });
 
-export default api;
+const regApi =  new Api({
+  baseURL: 'https://register.nomoreparties.co/',
+  headers: {"Content-Type": "application/json"}
+})
+export { api, regApi };
