@@ -2,8 +2,8 @@ import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import { api, regApi }  from "../utils/api";
+import { Redirect, Route, Switch, useHistory } from "react-router-dom";
+import { api }  from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import FormValidator from "../utils/FormValidator";
 import EditProfilePopup from './EditProfilePopup';
@@ -15,7 +15,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Login from "./Login";
 import Register from "./Register";
 import InfoTooltip from "./InfoTooltip";
-
+import {auth} from '../utils/auth';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -30,13 +30,32 @@ function App() {
     heading: '',
     image: ''
   })
-  
-  function login() {
-    
-  }
+  const history = useHistory();
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  function register(){
-    
+  function login(data) {
+    auth.signin(data)
+    .then(() => {
+      setIsSuccess(true);
+      setIsTooltipOpen(true);
+    setIsLoggedIn(true);})
+    .catch((err) => {
+      console.log(err.code,err.message);
+      setTooltipProps(false);
+      setIsTooltipOpen(true);});
+  }
+  
+
+  function register(email,password) {
+    auth.signup(email,password)
+    .then((data) => {
+    setIsSuccess(true);
+    setIsTooltipOpen(true);
+    setUser({...currentUser, _id: data._id, email: data.email })})
+    .catch((err) => {
+      console.log(err);
+      setTooltipProps(false);
+      setIsTooltipOpen(true);});
   }
 
   function handleEditAvatarClick() {
@@ -69,7 +88,6 @@ function App() {
     setDelCardWarnOpen(false);
     setSelectedCard({});
     setIsLoading(false);
-    setIsTooltipOpen(false);
   }
 
   useEffect(() => {
@@ -86,6 +104,7 @@ function App() {
 
   const [currentUser, setUser] = useState({
     _id: "",
+    email: "",
     name: "",
     about: "",
     avatar: "",
@@ -166,13 +185,11 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  function tooltipContents(resolution) {
- if (resolution) {
-  setTooltipProps({heading: "Success! You have now been registered.", image: URL('../images/sucess.svg')})
- } else {
-  setTooltipProps({heading: 'Oops, something went wrong! Please try again.', image: URL('../images/fail.svg')})
- }
-  } 
+
+  function closeTooltip() {
+    setIsTooltipOpen(false);
+    history.push('/');
+  }
 
   useEffect(() => { 
     const settings = {
@@ -201,13 +218,13 @@ function App() {
  
 
   return (
-    <BrowserRouter>
+    <>
+    
     <div className="page">
-      <CurrentUserContext.Provider value={currentUser}>
-        <Header loggedin={isLoggedIn} />
-        <Route path="/signin"><Login onLogin={login}/></Route>
-        <Route path='/register'><Register onRegister={register} /></Route> 
-        <ProtectedRoute path='/' loggedIn={isLoggedIn}>
+       
+        <ProtectedRoute path='/main' loggedIn={isLoggedIn}>
+        <CurrentUserContext.Provider value={currentUser}>
+        <Header  />
         <Main
           onEditProfileClick={handleEditProfileClick}
           onAddPlaceClick={handleAddPlaceClick}
@@ -248,15 +265,20 @@ function App() {
           onConfirmDelete={handleCardDelete}
           isLoading={isLoading}
         />
+        </CurrentUserContext.Provider>
         </ProtectedRoute>
         <InfoTooltip isOpen={isTooltipOpen}
-        onClose={closeAllPopups}
+        onClose={closeTooltip}
+        success={isSuccess}
         heading={tooltipProps.heading}
         image={tooltipProps.image} />
         <Footer />
-      </CurrentUserContext.Provider>
+      <Route path="/signin"><Login onLogin={login}/></Route>
+      <Route path='/register'><Register onRegister={register} /></Route> 
+      <Route exact path='/'>{isLoggedIn ? <Redirect to='/main' /> : <Redirect to='signin' />}</Route> 
+      
     </div>
-    </BrowserRouter>
+    </>
   );
 }
 

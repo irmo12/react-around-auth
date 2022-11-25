@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 
-function Login({handleSubmit}) {
+function Login({onLogin}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (!email || !password) {
+      return;      
+      }
+    onLogin({email,password});
+  }
   
   return (
     <div className="auth">

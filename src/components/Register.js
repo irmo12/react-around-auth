@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 
-function Register({handleSubmit}) {
+function Register({onRegister}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  function handleSubmit(e) {
+    e.preventDefault();
+    onRegister({email,password});
+  }
   
   return (
     <div className="auth">

@@ -66,7 +66,7 @@ class Api {
 
 
   registerParams(data) {
-    return fetch(`${this._baseURL}/signup`, {
+    return fetch(`${this._baseURL}signup`, {
       headers: this._headers,
       method: "POST",
       body: JSON.stringify(data),
@@ -74,7 +74,7 @@ class Api {
   }
 
   authorizationParams(data) {
-    return fetch(`${this._baseURL}/signin`, {
+    return fetch(`${this._baseURL}signin`, {
       headers: this._headers,
       method: "POST",
       body: JSON.stringify(data),
@@ -82,7 +82,7 @@ class Api {
   }
 
   getUserAuth(token) {
-    return fetch(`${this._baseURL}/users/me`, {
+    return fetch(`${this._baseURL}users/me`, {
       headers: {...this._headers, "Authorization":`Bearer ${token}`}
     }).then((res) => this._processResponse(res));
   }
