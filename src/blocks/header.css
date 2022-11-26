@@ -16,24 +16,36 @@
   max-height: 33px;
 }
 
-.header__auth {
-  visibility: hidden;
-  max-width: 52px;
-  max-height: 22px;
+.header__auth-logic{
+  display: flex;
+  flex-flow: row nowrap;
+  gap:24px;
+}
+
+.header__auth-link {
   margin: 51px 0px 0px;
-  font-family: "Inter";
-  font-style: normal;
   font-weight: 400;
   font-size: 18px;
   line-height: 122%;
   text-align: right;
-  color: #fff;
   cursor: pointer;
   text-decoration: none;
+  color: inherit;
+  background-color: transparent;
+  border: none;
 }
 
-.header__auth_active {
-visibility: visible;
+.header__auth:hover {
+  opacity: 0.6;
+}
+
+
+.header__auth-email {
+font-weight: 500;
+font-size: 18px;
+line-height: 1.22;
+text-align: right;
+width: 4vh;
 }
 
 @media screen and (max-width: 900px) {
