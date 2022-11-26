@@ -31,14 +31,33 @@ function App() {
     heading: '',
     image: '',
   })
+
   const history = useHistory()
   const [isSuccess, setIsSuccess] = useState(false)
+
+  const [currentUser, setUser] = useState({
+    _id: '',
+    name: '',
+    about: '',
+    avatar: '',
+  })
+
+  const [userAuth, setUserAuth] = useState({
+    _id: '',
+    email: '',
+  })
+
+  const [cards, setCards] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   function login(data) {
     auth
       .signin(data)
       .then(() => {
         setIsLoggedIn(true)
+        auth.checkToken(localStorage.getItem('token'))
+        .then((data) => {setUserAuth({_id: data._id, email: data.email})})
+        history.push('/main')
       })
       .catch((err) => {
         console.log(err.code, err.message)
@@ -115,22 +134,6 @@ function App() {
     return () => document.removeEventListener('keydown', closeByEscape)
   }, [])
 
-  const [currentUser, setUser] = useState({
-    _id: '',
-    name: '',
-    about: '',
-    avatar: '',
-  })
-
-  const [userAuth, setUserAuth] = useState({
-    _id: '',
-    email: '',
-  })
-
-  const [cards, setCards] = useState([])
-
-  const [isLoading, setIsLoading] = useState(false)
-
   useEffect(() => {
     api
       .getUserInfo()
@@ -205,7 +208,7 @@ function App() {
 
   function closeTooltip() {
     setIsTooltipOpen(false)
-    history.push('/')
+    history.push('/signin')
   }
 
   useEffect(() => {

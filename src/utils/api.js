@@ -83,7 +83,8 @@ class Api {
 
   getUserAuth(token) {
     return fetch(`${this._baseURL}users/me`, {
-      headers: {...this._headers, "Authorization":`Bearer ${token}`}
+      headers: {...this._headers, "Authorization":`Bearer ${token}`},
+      method: "GET"
     }).then((res) => this._processResponse(res));
   }
   

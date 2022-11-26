@@ -9,6 +9,7 @@ function Header({ loggedIn, signOut }) {
   const userAuth = useContext(AuthUserContext);
   let logOrRegister = 'Log in'
   let sendTo = true;
+  // console.log({userAuth})
 
   if (location.pathname==='/signin') { 
     logOrRegister = 'Sign up'
