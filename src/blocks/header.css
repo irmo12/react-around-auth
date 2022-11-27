@@ -16,10 +16,18 @@
   max-height: 33px;
 }
 
-.header__auth-logic{
+.header__auth-wrapper {
   display: flex;
   flex-flow: row nowrap;
   gap:24px;
+}
+
+.header__auth-email {
+  margin: 51px 0px 0px;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 122%;
+  text-align: right;
 }
 
 .header__auth-link {

@@ -5,7 +5,6 @@ import React, { useState, useEffect } from 'react'
 import { Redirect, Route, useHistory } from 'react-router-dom'
 import { api } from '../utils/api'
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
-import { AuthUserContext } from '../contexts/UserAuthContext'
 import FormValidator from '../utils/FormValidator'
 import EditProfilePopup from './EditProfilePopup'
 import EditAvatarPopup from './EditAvatarPopup'
@@ -55,8 +54,9 @@ function App() {
       .signin(data)
       .then(() => {
         setIsLoggedIn(true)
-        auth.checkToken(localStorage.getItem('token'))
-        .then((data) => {setUserAuth({_id: data._id, email: data.email})})
+        auth.checkToken(localStorage.getItem('token')).then((resData) => {
+          setUserAuth({ _id: resData.data._id, email: resData.data.email })
+        })
         history.push('/main')
       })
       .catch((err) => {
@@ -69,10 +69,9 @@ function App() {
   function register(email, password) {
     auth
       .signup(email, password)
-      .then((data) => {
+      .then(() => {
         setIsSuccess(true)
         setIsTooltipOpen(true)
-        setUserAuth({ _id: data._id, email: data.email })
       })
       .catch((err) => {
         console.log(err)
@@ -87,6 +86,7 @@ function App() {
       email: '',
     })
     setIsLoggedIn(false)
+    localStorage.removeItem('token')
   }
 
   function handleEditAvatarClick() {
@@ -120,6 +120,23 @@ function App() {
     setSelectedCard({})
     setIsLoading(false)
   }
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      auth
+        .checkToken(localStorage.getItem('token'))
+        .then((resData) => {
+          setUserAuth({ _id: resData.data._id, email: resData.data.email })
+          setIsLoggedIn(true)
+          history.push('/main')
+        })
+        .catch((err) => {
+          console.log(err.code, err.message)
+          setTooltipProps(false)
+          setIsTooltipOpen(true)
+        })
+    }
+  }, [])
 
   useEffect(() => {
     const closeByEscape = (e) => {
@@ -241,51 +258,53 @@ function App() {
     <>
       <div className="page">
         <CurrentUserContext.Provider value={currentUser}>
-          <AuthUserContext.Provider value={userAuth}>
-            <Header loggedIn={isLoggedIn} signOut={signOut} />
-            <ProtectedRoute path="/main" loggedIn={isLoggedIn}>
-              <Main
-                onEditProfileClick={handleEditProfileClick}
-                onAddPlaceClick={handleAddPlaceClick}
-                onEditAvatarClick={handleEditAvatarClick}
-                onCardClick={handleCardClick}
-                closeAllPopups={closeAllPopups}
-                onTrashClick={handleTrashClick}
-                onCardDelete={handleCardDelete}
-                onLikeClick={handleCardLike}
-                cards={cards}
-              />
-              <EditProfilePopup
-                isOpen={isEditProfileOpen}
-                onClose={closeAllPopups}
-                onUpdateUser={handleUpdateUser}
-                isLoading={isLoading}
-              ></EditProfilePopup>
-              <AddPlacePopup
-                isOpen={isAddPlaceOpen}
-                onClose={closeAllPopups}
-                onAddPlaceSubmit={handleAddPlaceSubmit}
-                isLoading={isLoading}
-              />
-              <EditAvatarPopup
-                isOpen={isEditAvatarOpen}
-                onClose={closeAllPopups}
-                onUpdateAvatar={handleChangeProfilePicture}
-                isLoading={isLoading}
-              />
-              <ImagePopup
-                card={selectedCard}
-                onClose={closeAllPopups}
-                isOpen={isImagePopupOpen}
-              />
-              <CardDeleter
-                isOpen={isDelCardWarnOpen}
-                onClose={closeAllPopups}
-                onConfirmDelete={handleCardDelete}
-                isLoading={isLoading}
-              />
-            </ProtectedRoute>
-          </AuthUserContext.Provider>
+          <Header
+            loggedIn={isLoggedIn}
+            signOut={signOut}
+            email={userAuth.email}
+          />
+          <ProtectedRoute path="/main" loggedIn={isLoggedIn}>
+            <Main
+              onEditProfileClick={handleEditProfileClick}
+              onAddPlaceClick={handleAddPlaceClick}
+              onEditAvatarClick={handleEditAvatarClick}
+              onCardClick={handleCardClick}
+              closeAllPopups={closeAllPopups}
+              onTrashClick={handleTrashClick}
+              onCardDelete={handleCardDelete}
+              onLikeClick={handleCardLike}
+              cards={cards}
+            />
+            <EditProfilePopup
+              isOpen={isEditProfileOpen}
+              onClose={closeAllPopups}
+              onUpdateUser={handleUpdateUser}
+              isLoading={isLoading}
+            ></EditProfilePopup>
+            <AddPlacePopup
+              isOpen={isAddPlaceOpen}
+              onClose={closeAllPopups}
+              onAddPlaceSubmit={handleAddPlaceSubmit}
+              isLoading={isLoading}
+            />
+            <EditAvatarPopup
+              isOpen={isEditAvatarOpen}
+              onClose={closeAllPopups}
+              onUpdateAvatar={handleChangeProfilePicture}
+              isLoading={isLoading}
+            />
+            <ImagePopup
+              card={selectedCard}
+              onClose={closeAllPopups}
+              isOpen={isImagePopupOpen}
+            />
+            <CardDeleter
+              isOpen={isDelCardWarnOpen}
+              onClose={closeAllPopups}
+              onConfirmDelete={handleCardDelete}
+              isLoading={isLoading}
+            />
+          </ProtectedRoute>
         </CurrentUserContext.Provider>
         <InfoTooltip
           isOpen={isTooltipOpen}

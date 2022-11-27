@@ -44,3 +44,6 @@ react is a distilled webdev description of components (using JSX) library, absol
 All features implemented using React library, with the exception of form validation, ought to refactor form validation as well.
 
 ### Adding registration, authorization and related features and components
+
+Our app now accepts user registration, and log on. Additionally, users do not need to log in on subsequent visits as we use browsers local storage to save the authentication token. I feel confident it would take a 9th grader at least eight minutes to crack my security.
+Added tooltip that informs user of succesful registration, or failure of log in/registration. Future update will adjust new components to be responsive as older components are.
