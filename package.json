@@ -40,5 +40,9 @@
   },
   "devDependencies": {
     "gh-pages": "^4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/irmo12/react-around-auth.git"
   }
 }
