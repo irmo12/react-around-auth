@@ -166,8 +166,8 @@ function App() {
       .patchUserInfo(newUser)
       .then((data) => {
         setUser(data)
+        closeAllPopups()
       })
-      .then(() => closeAllPopups())
       .catch((err) => console.log(err))
   }
 
@@ -175,8 +175,10 @@ function App() {
     setIsLoading(true)
     api
       .changeAvatar(avatar)
-      .then((data) => setUser({ ...currentUser, avatar: data.avatar }))
-      .then(() => closeAllPopups())
+      .then((data) => {
+        setUser({ ...currentUser, avatar: data.avatar })
+        closeAllPopups()
+      })
       .catch((err) => console.log(err))
   }
 
@@ -209,8 +211,8 @@ function App() {
         setCards((current) =>
           current.filter((card) => card._id !== selectedCard._id),
         )
+        closeAllPopups()
       })
-      .then(() => closeAllPopups())
       .catch((err) => console.log(err))
   }
 
@@ -218,8 +220,10 @@ function App() {
     setIsLoading(true)
     api
       .postNewCard(data)
-      .then((res) => setCards([res, ...cards]))
-      .then(() => closeAllPopups())
+      .then((res) => {
+        setCards([res, ...cards])
+        closeAllPopups()
+      })
       .catch((err) => console.log(err))
   }
 
