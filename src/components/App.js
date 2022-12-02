@@ -26,10 +26,6 @@ function App() {
   const [isDelCardWarnOpen, setDelCardWarnOpen] = useState(false)
   const [selectedCard, setSelectedCard] = useState({})
   const [isTooltipOpen, setIsTooltipOpen] = useState(false)
-  const [tooltipProps, setTooltipProps] = useState({
-    heading: '',
-    image: '',
-  })
 
   const history = useHistory()
   const [isSuccess, setIsSuccess] = useState(false)
@@ -61,7 +57,6 @@ function App() {
       })
       .catch((err) => {
         console.log(err.code, err.message)
-        setTooltipProps(false)
         setIsTooltipOpen(true)
       })
   }
@@ -75,7 +70,6 @@ function App() {
       })
       .catch((err) => {
         console.log(err)
-        setTooltipProps(false)
         setIsTooltipOpen(true)
       })
   }
@@ -132,11 +126,10 @@ function App() {
         })
         .catch((err) => {
           console.log(err.code, err.message)
-          setTooltipProps(false)
           setIsTooltipOpen(true)
         })
     }
-  }, [])
+  }, [history])
 
   useEffect(() => {
     const closeByEscape = (e) => {
@@ -229,7 +222,7 @@ function App() {
 
   function closeTooltip() {
     setIsTooltipOpen(false)
-    history.push('/signin')
+    setIsSuccess(false)
   }
 
   useEffect(() => {
@@ -314,8 +307,6 @@ function App() {
           isOpen={isTooltipOpen}
           onClose={closeTooltip}
           success={isSuccess}
-          heading={tooltipProps.heading}
-          image={tooltipProps.image}
         />
         <Route path="/signin">
           <Login onLogin={login} />
