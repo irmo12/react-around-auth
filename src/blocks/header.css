@@ -7,31 +7,33 @@
   gap: 41px;
   align-items: center;
   border-bottom: 1px solid rgba(84, 84, 84, 0.8);
-  padding-bottom: 41px;
   box-sizing: border-box;
 }
 
 .header__logo {
   max-width: 173px;
   max-height: 33px;
+  padding-bottom: 38px;
 }
 
 .header__auth-wrapper {
   display: flex;
   flex-flow: row nowrap;
-  gap:24px;
+  gap: 24px;
+  padding-bottom: 30px;
 }
 
 .header__auth-email {
-  margin: 51px 0px 0px;
   font-weight: 400;
   font-size: 18px;
-  line-height: 122%;
-  text-align: right;
+  line-height: 1.22;
+}
+
+.header__auth-logic {
+  padding-bottom: 1px;
 }
 
 .header__auth-link {
-  margin: 51px 0px 0px;
   font-weight: 400;
   font-size: 18px;
   line-height: 122%;
@@ -45,14 +47,6 @@
 
 .header__auth-link:hover {
   opacity: 0.6;
-}
-
-
-.header__auth-email {
-font-weight: 500;
-font-size: 18px;
-line-height: 1.22;
-text-align: left;
 }
 
 @media screen and (max-width: 900px) {

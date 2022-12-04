@@ -221,6 +221,9 @@ function App() {
   }
 
   function closeTooltip() {
+    if (isSuccess) {
+    history.push('/signin')
+    }
     setIsTooltipOpen(false)
     setIsSuccess(false)
   }
