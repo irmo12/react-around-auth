@@ -131,6 +131,13 @@ function App() {
     }
   }, [history])
 
+  const popupOpen =
+    isAddPlaceOpen ||
+    isDelCardWarnOpen ||
+    isEditAvatarOpen ||
+    isEditProfileOpen ||
+    isImagePopupOpen ||
+    isTooltipOpen
   useEffect(() => {
     const closeByEscape = (e) => {
       if (e.key === 'Escape') {
@@ -138,11 +145,11 @@ function App() {
         setIsTooltipOpen(false)
       }
     }
-
-    document.addEventListener('keydown', closeByEscape)
-
+    if (popupOpen) {
+      document.addEventListener('keydown', closeByEscape)
+    }
     return () => document.removeEventListener('keydown', closeByEscape)
-  }, [])
+  }, [popupOpen])
 
   useEffect(() => {
     api
@@ -222,7 +229,7 @@ function App() {
 
   function closeTooltip() {
     if (isSuccess) {
-    history.push('/signin')
+      history.push('/signin')
     }
     setIsTooltipOpen(false)
     setIsSuccess(false)
