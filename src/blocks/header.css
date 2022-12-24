@@ -2,19 +2,18 @@
   max-width: 880px;
   width: 100%;
   display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
+  flex-flow: column nowrap;
   gap: 41px;
   align-items: center;
   border-bottom: 1px solid rgba(84, 84, 84, 0.8);
   box-sizing: border-box;
-  padding-top: 44px;
 }
 
 .header__logo {
   max-width: 173px;
   max-height: 33px;
-  padding-bottom: 38px;
+  align-self: flex-start;
+  margin-top: 45px;
 }
 
 .header__auth-wrapper {

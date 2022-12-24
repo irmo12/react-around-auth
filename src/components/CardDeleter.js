@@ -20,6 +20,7 @@ export default function CardDeleter({
       onClose={onClose}
       onSubmit={handleSubmit}
       isLoading={isLoading}
+      isValid={true}
     />
   );
 }

@@ -5,7 +5,6 @@ import React, { useState, useEffect } from 'react'
 import { Redirect, Route, useHistory } from 'react-router-dom'
 import { api } from '../utils/api'
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
-import FormValidator from '../utils/FormValidator'
 import EditProfilePopup from './EditProfilePopup'
 import EditAvatarPopup from './EditAvatarPopup'
 import AddPlacePopup from './AddPlacePopup'
@@ -234,32 +233,6 @@ function App() {
     setIsTooltipOpen(false)
     setIsSuccess(false)
   }
-
-  useEffect(() => {
-    const settings = {
-      formSelector: '.popup__form',
-      inputSelector: '.popup__form-field',
-      submitButtonSelector: '.popup__form-submit',
-      inactiveButtonClass: '',
-      inputErrorClass: 'popup__form-field_error',
-      errorClass: 'popup__form-error-msg_inactive',
-    }
-    const formValidators = {}
-    const enableValidation = (settings) => {
-      const formList = Array.from(
-        document.querySelectorAll(settings.formSelector),
-      )
-      formList.forEach((formElement) => {
-        const validator = new FormValidator(settings, formElement)
-
-        const formName = formElement.getAttribute('name')
-
-        formValidators[formName] = validator
-        validator.enableValidation()
-      })
-    }
-    enableValidation(settings)
-  }, [])
 
   return (
     <>

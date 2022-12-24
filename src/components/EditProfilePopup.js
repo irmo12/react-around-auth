@@ -1,32 +1,31 @@
-import React, { useState, useContext, useEffect } from "react";
-import PopupWithForm from "./PopupWithForm";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import React, { useContext, useEffect } from 'react'
+import PopupWithForm from './PopupWithForm'
+import { useFormAndValidation } from '../hooks/useFormAndValidation'
+import { CurrentUserContext } from '../contexts/CurrentUserContext'
 
 function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
-  const [name, setName] = useState("");
-  const [about, setAbout] = useState("");
-
-  const currentUser = useContext(CurrentUserContext);
+  const currentUser = useContext(CurrentUserContext)
+  const {
+    values,
+    handleChange,
+    errors,
+    isValid,
+    setValues,
+  } = useFormAndValidation()
 
   useEffect(() => {
-    setName(currentUser.name);
-    setAbout(currentUser.about);
-  }, [currentUser, isOpen]);
-
-  function handleNameChange(e) {
-    setName(e.target.value);
-  }
-
-  function handleAboutChange(e) {
-    setAbout(e.target.value);
-  }
+    setValues({
+      profileName: currentUser.name,
+      profileAbout: currentUser.about,
+    })
+  }, [currentUser, isOpen, setValues])
 
   function handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault()
     onUpdateUser({
-      name,
-      about,
-    });
+      name: values.profileName,
+      about: values.profileAbout,
+    })
   }
 
   return (
@@ -34,48 +33,73 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
       name="editProfile"
       heading="Edit&nbsp;profile"
       submitText="Save"
-      loadingText='Saving...'
+      loadingText="Saving..."
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
       isLoading={isLoading}
+      isValid={isValid}
     >
       <fieldset className="popup__form-inputs">
-        <input
-          type="text"
-          className="popup__form-field"
-          placeholder="Name"
-          name="profileName"
-          required
-          maxLength="40"
-          minLength="2"
-          id="name"
-          value={name}
-          onChange={handleNameChange}
-        />
-        <span
-          className="popup__form-error-msg popup__form-error-msg_inactive"
-          id="profileName"
-        />
-        <input
-          type="text"
-          className="popup__form-field"
-          placeholder="About me"
-          name="profileAbout"
-          required
-          maxLength="200"
-          minLength="2"
-          id="about"
-          value={about}
-          onChange={handleAboutChange}
-        />
-        <span
-          className="popup__form-error-msg popup__form-error-msg_inactive"
-          id="profileAbout"
-        />
+        <div className="popup__form-info-couple">
+          <input
+            type="text"
+            className={
+              !errors.profileName
+                ? 'popup__form-field'
+                : 'popup__form-field popup__form-field_error'
+            }
+            placeholder="Name"
+            name="profileName"
+            required
+            maxLength="40"
+            minLength="2"
+            id="name"
+            value={values.profileName || ''}
+            onChange={handleChange}
+          />
+          <span
+            className={
+              !errors.profileName
+                ? 'popup__form-error-msg popup__form-error-msg_inactive'
+                : 'popup__form-error-msg'
+            }
+            id="profileName"
+          >
+            {errors.profileName}
+          </span>
+        </div>
+        <div className="popup__form-info-couple">
+          <input
+            type="text"
+            className={
+              !errors.profileAbout
+                ? 'popup__form-field'
+                : 'popup__form-field popup__form-field_error'
+            }
+            placeholder="About me"
+            name="profileAbout"
+            required
+            maxLength="200"
+            minLength="2"
+            id="about"
+            value={values.profileAbout || ''}
+            onChange={handleChange}
+          />
+          <span
+            className={
+              !errors.profileAbout
+                ? 'popup__form-error-msg popup__form-error-msg_inactive'
+                : 'popup__form-error-msg'
+            }
+            id="profileAbout"
+          >
+            {errors.profileAbout}
+          </span>
+        </div>
       </fieldset>
     </PopupWithForm>
-  );
+  )
 }
 
-export default EditProfilePopup;
+export default EditProfilePopup
